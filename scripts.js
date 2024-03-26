@@ -30,14 +30,36 @@ function validateForm() {
   }
 
   function login() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const university = document.getElementById('university').value;
+    // Gather the data from the form
+    const userData = {
+        username: document.getElementById('username').value,
+        password: document.getElementById('password').value,
+    };
 
-    if (university === 'university1' && email && password) {
-      // Redirect to my.asu.edu
-      window.location.href = 'https://my.asu.edu';
-    } else {
-      alert('Invalid credentials or university selection.');
-    }
-  }
+    // Send the data to the server for authentication
+    fetch('http://localhost:3000/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Login failed');
+        }
+    })
+    .then(data => {
+        console.log(data.message); // Message from server
+        alert(`Login successful: ${data.message}`);
+        // Redirect to the dashboard or homepage after successful login
+        window.location.href = 'dashboard.html'; // Replace 'dashboard.html' with the actual URL of your dashboard page
+    })
+    .catch(error => {
+        console.error('Login failed:', error.message);
+        alert('Login failed. Please check your credentials and try again.');
+    });
+}
+
