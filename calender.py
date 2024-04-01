@@ -42,8 +42,8 @@ def ics_to_text(ics_file_path, output_text_path):
 
 # Define URLs and file paths
 ics_url = 'https://canvas.asu.edu/feeds/calendars/user_atOd71gtPvujCgvxl1axuWSxYeUr3Zy5FHL5DnsR.ics'
-local_ics_path = Path('canvas_calendar.ics')  # Adjust as needed
-output_text_path = Path('canvas_calendar.txt')  # Adjust as needed
+local_ics_path = Path('/Users/aryanredhu/hackathon/AI_Hackathon/files')  # Adjust as needed
+output_text_path = Path('/Users/aryanredhu/hackathon/AI_Hackathon/files')  # Adjust as needed
 
 # Download and convert
 if download_calendar_ics(ics_url, local_ics_path):
