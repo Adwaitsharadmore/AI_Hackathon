@@ -1,6 +1,7 @@
 import os
 import requests
 import html
+
 def get_all_courses(api_url, headers):
     courses = []
     while api_url:
@@ -58,6 +59,8 @@ def fetch_files_and_download(course_id, headers, api_base_url, download_dir):
             files = response.json()
             for file in files:
                 filename = sanitize_filename(file.get('filename'))
+                if not filename.lower().endswith('.pdf'):
+                    continue  # Skip non-PDF files
                 file_url = file.get('url')  # Direct download URL assumed
                 local_path = os.path.join(download_dir, filename)
                 download_file(file_url, local_path, headers)
@@ -65,6 +68,7 @@ def fetch_files_and_download(course_id, headers, api_base_url, download_dir):
         else:
             print(f"Failed to fetch files for Course ID: {course_id}")
             break
+
 
 def get_course_data(selected_courses, headers, api_base_url, download_dir):
     for course in selected_courses:
@@ -86,10 +90,11 @@ def fetch_and_download_module_files(course_id, headers, api_base_url, download_d
                             file_metadata = file_response.json()
                             # Use 'display_name' from the metadata for filename
                             filename = sanitize_filename(file_metadata['display_name'])
+                            if not filename.lower().endswith('.pdf'):
+                                continue  # Skip this file if it's not a PDF
                             local_path = os.path.join(download_dir, filename)
                             # Use 'url' from the metadata for downloading the file
                             file_url = file_metadata.get('url')
-                            
                             if file_url:
                                 download_file(file_url, local_path, headers)
                         else:
@@ -100,13 +105,14 @@ def fetch_and_download_module_files(course_id, headers, api_base_url, download_d
             print(f"Failed to fetch modules for Course ID: {course_id}")
             break
 
+
 def main():
 # Main script execution starts here
     api_base_url = "https://canvas.asu.edu/api/v1"
     api_url = f"{api_base_url}/courses?per_page=100"
     api_key = "7236~S4hTI1YNv5PncjZyzeEDNvSaCbgl7Hnm4ZCluNtzXIjC6BmiinQioEalgLcYFw2C"
     headers = {"Authorization": "Bearer " + api_key}
-    download_dir = "/Users/aryanredhu/hackathon"
+    download_dir = "/Users/aryanredhu/hackathon/AI_Hackathon/files"
 
     all_courses = get_all_courses(api_url, headers)
     list_courses(all_courses)
@@ -119,9 +125,8 @@ def main():
         # Existing file and module fetch and download calls
         fetch_files_and_download(course_id, headers, api_base_url, download_dir)
         fetch_and_download_module_files(course_id, headers, api_base_url, download_dir)
-        
-        # New: Fetch and download from nested folders starting with the root folder
-        
+    
+
 
 if __name__ == "__main__":
     main()
