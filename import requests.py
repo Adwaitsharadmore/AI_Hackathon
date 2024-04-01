@@ -89,6 +89,7 @@ def fetch_and_download_module_files(course_id, headers, api_base_url, download_d
                             local_path = os.path.join(download_dir, filename)
                             # Use 'url' from the metadata for downloading the file
                             file_url = file_metadata.get('url')
+                            
                             if file_url:
                                 download_file(file_url, local_path, headers)
                         else:
@@ -98,47 +99,6 @@ def fetch_and_download_module_files(course_id, headers, api_base_url, download_d
         else:
             print(f"Failed to fetch modules for Course ID: {course_id}")
             break
-def fetch_and_download_files_in_folder(folder_id, headers, api_base_url, download_dir):
-    folder_files_url = f"{api_base_url}/folders/{folder_id}/files"
-    while folder_files_url:
-        response = requests.get(folder_files_url, headers=headers)
-        if response.status_code == 200:
-            files = response.json()
-            for file in files:
-                filename = sanitize_filename(file['display_name'])
-                file_url = file['url']
-                local_path = os.path.join(download_dir, filename)
-                download_file(file_url, local_path, headers)
-            folder_files_url = response.links['next']['url'] if 'next' in response.links else None
-        else:
-            print(f"Failed to fetch files for Folder ID: {folder_id}")
-            break
-def fetch_and_download_from_nested_folders(folder_id, headers, api_base_url, download_dir):
-    # First, download files in the current folder
-    fetch_and_download_files_in_folder(folder_id, headers, api_base_url, download_dir)
-
-    # Then, list subfolders and recursively fetch their contents
-    subfolders_url = f"{api_base_url}/folders/{folder_id}/folders"
-    while subfolders_url:
-        response = requests.get(subfolders_url, headers=headers)
-        if response.status_code == 200:
-            subfolders = response.json()
-            for subfolder in subfolders:
-                subfolder_id = subfolder['id']
-                fetch_and_download_from_nested_folders(subfolder_id, headers, api_base_url, download_dir)
-            subfolders_url = response.links['next']['url'] if 'next' in response.links else None
-        else:
-            print(f"Failed to fetch subfolders for Folder ID: {folder_id}")
-            break
-def get_course_root_folder_id(course_id, headers, api_base_url):
-    folders_url = f"{api_base_url}/courses/{course_id}/folders/root"
-    response = requests.get(folders_url, headers=headers)
-    if response.status_code == 200:
-        folder_data = response.json()
-        return folder_data['id']
-    else:
-        print(f"Failed to retrieve root folder for Course ID: {course_id}")
-        return None
 
 def main():
 # Main script execution starts here
@@ -161,9 +121,7 @@ def main():
         fetch_and_download_module_files(course_id, headers, api_base_url, download_dir)
         
         # New: Fetch and download from nested folders starting with the root folder
-        root_folder_id = get_course_root_folder_id(course_id, headers, api_base_url)
-        if root_folder_id:
-            fetch_and_download_from_nested_folders(root_folder_id, headers, api_base_url, download_dir)
+        
 
 if __name__ == "__main__":
     main()
