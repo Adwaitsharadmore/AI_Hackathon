@@ -1,44 +1,43 @@
 import os
 from pdf2image import convert_from_path
 import pytesseract
+from concurrent.futures import ThreadPoolExecutor
 
-def pdf_to_text(pdf_path, text_path):
-    """
-    Convert a PDF file to text using OCR and save the text to a specified location.
+def ocr_page(image):
+    # Customize Tesseract command for accuracy
+    custom_config = r'--oem 3 --psm 4'  # Adjust based on your document's layout
+    return pytesseract.image_to_string(image, config=custom_config, lang='eng')  # Specify language as needed
+
+def pdf_to_text_parallel(pdf_path):
+    images = convert_from_path(pdf_path, dpi=300, grayscale=True)
+    text_fragments = []
+
+    # Process pages in parallel
+    with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+        text_fragments = list(executor.map(ocr_page, images))
+
+    return ''.join(text_fragments)
+
+def convert_pdfs_in_folder_parallel(folder_path):
+    pdf_paths = []
+
+    # Walk through the directory to find all PDF files
+    for root, _, files in os.walk(folder_path):
+        for file in files:
+            if file.lower().endswith('.pdf'):
+                pdf_paths.append(os.path.join(root, file))
     
-    Args:
-    - pdf_path: Path to the PDF file.
-    - text_path: Path to save the output text file.
-    """
-    # Convert PDF to a list of images
-    images = convert_from_path(pdf_path)
-    
-    # Initialize an empty string to store text
-    text = ""
-    
-    # Iterate over each image and use Tesseract to extract text
-    for image in images:
-        text += pytesseract.image_to_string(image)
-    
-    # Save the extracted text to a file
+    # Process each PDF in parallel
+    with ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+        executor.map(process_pdf, pdf_paths)
+
+def process_pdf(pdf_path):
+    text = pdf_to_text_parallel(pdf_path)
+    text_path = os.path.splitext(pdf_path)[0] + '.txt'
+    print(f"Converting {pdf_path} to text and saving to {text_path}")
     with open(text_path, 'w', encoding='utf-8') as f:
         f.write(text)
 
-def convert_pdfs_in_folder(folder_path):
-    """
-    Convert all PDF files found in a folder and its subfolders to text.
-    
-    Args:
-    - folder_path: Path to the folder to search for PDF files.
-    """
-    for root, dirs, files in os.walk(folder_path):
-        for file in files:
-            if file.lower().endswith('.pdf'):
-                pdf_path = os.path.join(root, file)
-                text_path = os.path.splitext(pdf_path)[0] + '.txt'
-                print(f"Converting {pdf_path} to text.")
-                pdf_to_text(pdf_path, text_path)
-                print(f"Text saved to {text_path}")
-
-# Replace 'output' with the path to your specific 'output' folder if necessary
-convert_pdfs_in_folder('output')
+# Start the conversion process
+if __name__ == "__main__":
+    convert_pdfs_in_folder_parallel('output')
