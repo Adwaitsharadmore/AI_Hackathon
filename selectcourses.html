@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PrepPal - Courses</title>
+  <link rel="stylesheet" href="./selectcourses.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="course-container">
+    <div class="courses">
+      <h2>Choose the courses you want on your Dashboard</h2> 
+      <h3>List of all your courses from your Canvas</h3>
+     
+     <!-- 
+        <div class="card-container" id="cardContainer">
+        <div class="course-card" onclick="toggleCheckbox(this)">
+          <input type="checkbox" id="cse240" class="course-checkbox"> 
+          <label for="cse240" class="course-label"></label>
+          <h3>CSE 240: Introduction to Programming</h3>
+        </div>
+     --> 
+        
+        <div class="course-card" onclick="toggleCheckbox(this)">
+          <input type="checkbox" id="cse240" class="course-checkbox"> 
+          <label for="cse240" class="course-label"> CSE 240: Introduction to Programming</label>
+          </label>
+          <h3>CSE 240: Introduction to Programming</h3>
+        </div>
+        
+        
+        <div class="course-card" onclick="toggleCheckbox(this)">
+          <input type="checkbox" id="cse265" class="course-checkbox">
+          <label for="cse265" class="course-label">MAT 265: Calculus I</label>
+          <h3>MAT 265: Calculus I</h3>
+        </div>
+        
+        <div class="course-card" onclick="toggleCheckbox(this)">
+          <input type="checkbox" id="cse310" class="course-checkbox">
+          <label for="cse310" class="course-label">CSE 310: Data Structures & Algorithms</label>
+          <h3>CSE 310: Data Structures & Algorithms</h3>
+        </div>
+        
+        <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+
+          <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+
+          <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+
+          <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+
+          <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+
+          <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+
+          <div class="course-card" onclick="toggleCheckbox(this)">
+            <input type="checkbox" id="cse265" class="course-checkbox">
+            <label for="cse265" class="course-label">📊</label>
+            <h3>MAT 265: Calculus I</h3>
+          </div>
+        <!-- Add more course cards here -->
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+function toggleCheckbox(courseCard) {
+    const checkbox = courseCard.querySelector('.course-checkbox');
+    checkbox.checked = !checkbox.checked;
+    courseCard.classList.toggle('selected', checkbox.checked);
+}
+
+
+
+    // Function to dynamically adjust font size based on the number of courses
+    function adjustFontSize() {
+      const cardContainer = document.getElementById("cardContainer");
+      const courseLabels = cardContainer.querySelectorAll(".course-label");
+      const numCourses = courseLabels.length;
+      const baseFontSize = 16; // Base font size
+      const minFontSize = 12; // Minimum font size
+      const maxFontSize = 24; // Maximum font size
+      let fontSize = baseFontSize;
+
+      if (numCourses <= 6) {
+        // Font size increases for fewer courses
+        fontSize = maxFontSize;
+      } else if (numCourses >= 16) {
+        // Font size decreases for more courses
+        fontSize = minFontSize;
+      } else {
+        // Linear interpolation for font size between min and max based on number of courses
+        fontSize = minFontSize + (maxFontSize - minFontSize) * ((numCourses - 6) / 10);
+      }
+
+      // Apply the calculated font size to each course label
+      courseLabels.forEach(label => {
+        label.style.fontSize = fontSize + "px";
+      });
+    }
+
+    // Call the function initially
+    adjustFontSize();
+  </script>
+</body>
+</html>
