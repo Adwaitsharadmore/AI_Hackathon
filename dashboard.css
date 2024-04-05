@@ -1,0 +1,276 @@
+body {
+    font-family: 'Inter', sans-serif; /* Using Inter font from Google Fonts */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    display: flex; /* Make the body a flex container */
+    min-height: 100vh; /* Ensures the body takes up the full viewport height */
+    align-items: center; /* Center the content vertically within the viewport */
+    justify-content: center; /* Center the content horizontally within the viewport */
+    flex-direction: column; /* Arrange sections vertically */
+    background-color: black; /* Black background */
+    width: 1340px;
+    padding: 60px;
+  }
+  
+/* CSS for h2 within .courses */
+.courses h2 {
+    font-size: 3em; /* Assuming you want a larger font for PrepPal */
+    color: #f7f44b; /* Green color for PrepPal */
+    margin-bottom: 20px; /* Increase space after PrepPal */
+}
+
+.courses h3 {
+    font-size: 2em; /* Assuming you want a larger font for PrepPal */
+    color: #ffffff; /* Green color for PrepPal */
+    margin-bottom: 20px !important; /* Increase space after PrepPal */
+}
+
+.course-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%; /* Ensure full width */
+    padding: 50px;
+}
+
+.courses {
+    max-width: 100%; /* Courses take up full width for cards */
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap; /* Wrap cards to fit on a line */
+  justify-content: space-between; /* Space cards evenly */
+  gap: 30px; /* Add spacing between cards */
+  width: 800px;
+}
+
+.course-card {
+  display: flex; /* Make the card a flex container for horizontal layout */
+  flex-direction: row;
+  background-color: white; /* White background for cards */
+  border-radius: 5px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Add a slight shadow */
+  width: 100%; /* Cards take full width within the container */
+  padding: 30px; /* Add padding around content */
+}
+
+.course-card {
+    position: relative; /* Ensures the close button is positioned relative to the course card */
+    padding-right: 30px; /* Adjust as needed to make space for the close button */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    cursor: pointer;
+    color: #888; /* Color of the cross symbol */
+  }
+  
+  .close-button:hover {
+    color: #555; /* Change color on hover if desired */
+  }
+  
+
+.course-card h3 {
+  margin-bottom: 10px; /* Add space below course name */
+  color: #000; /* Black text for course name */
+}
+
+.course-card img {
+  width: 50%; /* Set image width to half the card width */
+  border-radius: 5px; /* Rounded corners for images */
+  margin-right: 20px; /* Add margin between image and text */
+}
+
+.exams {
+    max-width: 40%;
+    background-color: #F2F2F2; /* Light gray background */
+    border-radius: 10px; /* Curved corners for the box */
+    padding: 30px;
+}
+
+.exams h3{
+  text-align: center;
+
+}
+
+/* Style for the table */
+.exams .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px; /* Add some space below the table */
+}
+
+/* Style for table headers */
+th {
+  background-color: #f2f2f2; /* Light gray background */
+  color: #333; /* Dark text color */
+  font-weight: bold; /* Bold font weight */
+  padding: 10px; /* Padding around the content */
+  text-align: left; /* Align text to the left */
+  border: 1px solid #ddd; /* Add border */
+}
+
+/* Style for table cells */
+td {
+  padding: 10px; /* Padding around the content */
+  border: 1px solid #ddd; /* Add border */
+}
+
+/* Style for even rows (alternating background color) */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Light gray background */
+}
+
+/* Style for hover effect on rows */
+tbody tr:hover {
+  background-color: #e0e0e0; /* Light gray background on hover */
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 10;
+    padding: 10;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: black;
+}
+
+.courses h2 {
+    font-size: 3em;
+    color: #f7f44b;
+    margin-bottom: 10px;
+}
+
+.courses h3 {
+    font-size: 2em;
+    color: #ffffff;
+    margin-bottom: 100px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e0e0e0;
+}
+
+.course-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding: 70px;
+}
+
+.courses {
+    max-width: 100%;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  padding: 30px;
+}
+
+.course-card h3 {
+  margin-bottom: 10px;
+  color: #000;
+}
+
+
+.exams {
+    max-width: 30%;
+    background-color: #F2F2F2;
+    padding: 30px;
+}
+
+/* New CSS for the outer box */
+.outer-box {
+  border: 2px solid #ccc;
+  padding: 20px;
+  margin: 20px;
+}
+
+.upcoming-exams h3{
+  font-size: 2em;
+  color: white
+}
+
+.exam-list {
+    font-size: 0.5em;
+}
+
+.progress-section h3{
+  text-align: center;
+}
+
+.progress-section .table{
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.progress-section .th{
+  background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.progress-section .td{
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.progress-bar{
+  color: yellow;
+}
+
+.generate-button {
+    background-color: white;
+    font-size: 1em;
+}
