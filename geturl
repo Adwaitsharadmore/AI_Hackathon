@@ -1,0 +1,104 @@
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse
+from pathlib import Path
+
+# Configuration
+API_TOKEN = '7236~S4hTI1YNv5PncjZyzeEDNvSaCbgl7Hnm4ZCluNtzXIjC6BmiinQioEalgLcYFw2C'
+URLS_FILE_PATH = '/Users/aryanredhu/hackathon/AI_Hackathon/output/urls.txt'
+DOWNLOAD_DIR = Path('/Users/aryanredhu/hackathon/AI_Hackathon/output/download_directory')
+API_BASE_URL = 'https://canvas.asu.edu/api/v1'
+
+# Ensure the download directory exists
+DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
+
+session = requests.Session()
+session.headers.update({'Authorization': f'Bearer {API_TOKEN}'})
+
+def get_download_url_from_file_api(file_api_url):
+    response = session.get(file_api_url)
+    if response.ok:
+        file_data = response.json()
+        return file_data.get('url')
+    else:
+        print(f"Error getting download URL from {file_api_url}. Status code: {response.status_code}")
+        return None
+
+def download_pdf(pdf_url, filename):
+    response = session.get(pdf_url, allow_redirects=True)
+    if response.ok:
+        filepath = DOWNLOAD_DIR / filename
+        with open(filepath, 'wb') as file:
+            file.write(response.content)
+        print(f"Downloaded: {filepath}")
+    else:
+        print(f"Failed to download PDF from {pdf_url}. Status code: {response.status_code}")
+
+def process_assignment(course_id, assignment_id):
+    assignment_url = f"{API_BASE_URL}/courses/{course_id}/assignments/{assignment_id}"
+    response = session.get(assignment_url)
+    if response.ok:
+        assignment_data = response.json()
+        description = assignment_data.get('description', '')
+        if description:
+            soup = BeautifulSoup(description, 'html.parser')
+            for link in soup.find_all('a', href=True):
+                if 'href' in link.attrs and 'files' in link['href']:
+                    file_api_url = link['data-api-endpoint']
+                    download_url = get_download_url_from_file_api(file_api_url)
+                    if download_url:
+                        filename = f"{link.text}.pdf"
+                        download_pdf(download_url, filename)
+    else:
+        print(f"Error fetching assignment data: {response.status_code}")
+
+def process_module_item(course_id, module_id, module_item_id):
+    module_item_url = f"{API_BASE_URL}/courses/{course_id}/assignments/{module_item_id}/items"
+    response = session.get(module_item_url)
+    if response.ok:
+        item_data = response.json()
+        # Your logic for handling the module item's data...
+        print("Successfully fetched module item data.")
+    else:
+        print(f"Error fetching module item: {response.status_code}, URL attempted: {module_item_url}")
+
+def process_content(url):
+    parsed_url = urlparse(url)
+    path_segments = parsed_url.path.strip("/").split('/')
+    
+    if "courses" in path_segments:
+        try:
+            course_id_index = path_segments.index("courses") + 1
+            course_id = path_segments[course_id_index]
+        except (ValueError, IndexError):
+            print(f"Course ID not found in URL: {url}")
+            return
+        
+        if "assignments" in path_segments:
+            try:
+                assignment_id_index = path_segments.index("assignments") + 1
+                assignment_id = path_segments[assignment_id_index]
+                process_assignment(course_id, assignment_id)
+            except (ValueError, IndexError):
+                print(f"Assignment ID not found in URL: {url}")
+        
+        elif "modules" in path_segments and "items" in path_segments:
+            try:
+                module_id_index = path_segments.index("modules") + 1
+                module_item_id_index = path_segments.index("items") + 1
+                module_id = path_segments[module_id_index]  # Module ID needed here
+                module_item_id = path_segments[module_item_id_index]
+                process_module_item(course_id, module_id, module_item_id)
+            except (ValueError, IndexError):
+                print(f"Module or Module item ID not found in URL: {url}")
+        else:
+            print(f"Unrecognized or unsupported URL format: {url}")
+    else:
+        print(f"URL does not contain 'courses': {url}")
+
+if __name__ == "__main__":
+    with open(URLS_FILE_PATH, 'r') as file:
+        urls = file.read().splitlines()
+
+    for url in urls:
+        process_content(url)
